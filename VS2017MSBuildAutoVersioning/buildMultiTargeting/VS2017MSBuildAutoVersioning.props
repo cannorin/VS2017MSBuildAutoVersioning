@@ -1,0 +1,4 @@
+﻿<!-- buildMultiTargeting/VS2017MSBuildAutoVersioning.props -->
+<Project>
+  <Import Project="..\build\VS2017MSBuildAutoVersioning.props" />
+</Project>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+
+  <Target Name="AutoVersionBeforeBuild" BeforeTargets="BeforeBuild" Condition="!Exists($(AutoVersionLockFilePath))">
+    <GetAutoVersion BaseVersion="$(BaseVersion)">
+      <Output TaskParameter="AutoVersion" PropertyName="AVNewVersion" />
+    </GetAutoVersion>
+
+    <PropertyGroup>
+      <Version Condition="$(AVNewVersion) != ''">$(AVNewVersion)</Version>
+      <PackageVersion Condition="$(AVNewVersion) != ''">$(AVNewVersion)</PackageVersion>
+    </PropertyGroup>
+  </Target>
+
+</Project>

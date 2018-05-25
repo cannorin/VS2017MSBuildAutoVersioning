@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+    <AssemblyName>VS2017MSBuildAutoVersioning</AssemblyName>
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <VersionPrefix>1.0.11</VersionPrefix>
+    <VersionSuffix Condition="$(Configuration) == 'Release'"></VersionSuffix>
+    <VersionSuffix Condition="$(Configuration) == 'Debug'">pre$([System.DateTime]::Now.ToString('yyyyMMddHHmm'))</VersionSuffix>
+    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
+    <DevelopmentDependency>True</DevelopmentDependency>
+    <PackageId>VS2017MSBuildAutoVersioning</PackageId>
+    <Authors>cannorin</Authors>
+    <Copyright>(c) 2018 cannorin</Copyright>
+    <Company />
+    <Description>Bring back the asterisks.</Description>
+    <PackageProjectUrl>https://github.com/cannorin/VS2017MSBuildAutoVersioning</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/cannorin/VS2017MSBuildAutoVersioning/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageTags>msbuild package auto version increment</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="build\*" PackagePath="build\" />
+    <Content Include="buildMultiTargeting\*" PackagePath="buildMultiTargeting\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" Version="15.7.179" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.7.179" />
+    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+  </ItemGroup>
+  
+  <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
+    
+    <!--The include needs to happen after output has been copied to build output folder
+    but before NuGet generates a nuspec.-->
+    
+    <ItemGroup>
+      <_PackageFiles Include="bin\$(Configuration)\**\*.dll">
+        <PackagePath>tasks\%(RecursiveDir)</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+    </ItemGroup>
+  </Target>
+
+</Project>

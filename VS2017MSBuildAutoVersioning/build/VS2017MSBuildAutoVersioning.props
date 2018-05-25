@@ -1,0 +1,15 @@
+﻿<!-- build/VS2017MSBuildAutoVersioning.props -->
+<Project TreatAsLocalProperty="TaskFolder;TaskAssembly">
+
+  <PropertyGroup>
+    <TaskFolder Condition=" '$(MSBuildRuntimeType)' == 'Core' ">netstandard2.0</TaskFolder>
+    <TaskFolder Condition=" '$(MSBuildRuntimeType)' != 'Core' ">net46</TaskFolder>
+    <TaskAssembly>$(MSBuildThisFileDirectory)..\tasks\$(TaskFolder)\VS2017MSBuildAutoVersioning.dll</TaskAssembly>
+  </PropertyGroup>
+
+  <UsingTask TaskName="VS2017MSBuildAutoVersioning.GetAutoVersion" AssemblyFile="$(TaskAssembly)" />
+
+  <PropertyGroup>
+    <AutoVersionLockFilePath>$(MSBuildProjectDirectory)\$(MSBuildProjectName).autover.lock</AutoVersionLockFilePath>
+  </PropertyGroup>
+</Project>
